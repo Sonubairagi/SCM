@@ -45,65 +45,66 @@ public class OauthAuthenticationSuccessHandler implements AuthenticationSuccessH
 
         OAuth2User authenticatedUser = oAuth2AuthenticationToken.getPrincipal();
 
-        User dbUser = userRepository.findByEmail(authenticatedUser.getAttribute("email") !=null ? authenticatedUser.getAttribute("email") : authenticatedUser.getAttribute("login")+"@gmail.com").orElse(null);
-        if(dbUser==null) {
+        User dbUser = userRepository
+                .findByEmail(authenticatedUser.getAttribute("email") != null ? authenticatedUser.getAttribute("email")
+                        : authenticatedUser.getAttribute("login") + "@gmail.com")
+                .orElse(null);
+        if (dbUser == null) {
 
-        /*
-         * DefaultOAuth2User defaultOAuth2User =
-         * (DefaultOAuth2User)authentication.getPrincipal();
-         */
+            /*
+             * DefaultOAuth2User defaultOAuth2User =
+             * (DefaultOAuth2User)authentication.getPrincipal();
+             */
 
-        logger.info("user name : " + authenticatedUser.getName());
-        authenticatedUser.getAttributes().forEach((key, value) -> {
-            logger.info("{} => {}", key, value);
-        });
+            logger.info("user name : " + authenticatedUser.getName());
+            authenticatedUser.getAttributes().forEach((key, value) -> {
+                logger.info("{} => {}", key, value);
+            });
 
-        logger.info(authenticatedUser.getAuthorities().toString());
+            logger.info(authenticatedUser.getAuthorities().toString());
 
-        User user = new User();
-        user.setId(UUID.randomUUID().toString());
-        
-        user.setEmailVerified(true);
-        user.setEnabled(true);
-        user.setProviderUserId(authenticatedUser.getName());
-        user.setRoleList(List.of(AppConstants.ROLE_USER));
-        user.setPassword("password");
-        
+            User user = new User();
+            user.setId(UUID.randomUUID().toString());
 
-        if (authorizedClientRegistrationId.equalsIgnoreCase("google")) {
+            user.setEmailVerified(true);
+            user.setEnabled(true);
+            user.setProviderUserId(authenticatedUser.getName());
+            user.setRoleList(List.of(AppConstants.ROLE_USER));
+            user.setPassword("password");
 
-            logger.info("inside google sign in");
-            user.setName(authenticatedUser.getAttribute("name"));
-            user.setEmail(authenticatedUser.getAttribute("email"));
-            user.setProfilePic(authenticatedUser.getAttribute("picture"));
-            user.setAbout("the user logged in by google");
-            user.setProvider(Providers.GOOGLE);
-            
+            if (authorizedClientRegistrationId.equalsIgnoreCase("google")) {
 
-        } else if (authorizedClientRegistrationId.equalsIgnoreCase("github")) {
+                logger.info("inside google sign in");
+                user.setName(authenticatedUser.getAttribute("name"));
+                user.setEmail(authenticatedUser.getAttribute("email"));
+                user.setProfilePic(authenticatedUser.getAttribute("picture"));
+                user.setAbout("the user logged in by google");
+                user.setProvider(Providers.GOOGLE);
 
-            logger.info("inside github sign in");
-            user.setName(authenticatedUser.getAttribute("name"));
-            user.setEmail(authenticatedUser.getAttribute("email") !=null ? authenticatedUser.getAttribute("email") : authenticatedUser.getAttribute("login")+"@gmail.com");
-            user.setProfilePic(authenticatedUser.getAttribute("avatar_id"));
-            user.setAbout("the user logged in by github");
-            user.setProvider(Providers.GITHUB);
-            
+            } else if (authorizedClientRegistrationId.equalsIgnoreCase("github")) {
+
+                logger.info("inside github sign in");
+                user.setName(authenticatedUser.getAttribute("login"));
+                user.setEmail(authenticatedUser.getAttribute("email") != null ? authenticatedUser.getAttribute("email")
+                        : authenticatedUser.getAttribute("login") + "@gmail.com");
+                user.setProfilePic(authenticatedUser.getAttribute("avatar_url"));
+                user.setAbout("the user logged in by github");
+                user.setProvider(Providers.GITHUB);
+
+            } else {
+
+                logger.info("Unknown Provider");
+
+            }
+
+            User savedUser = userRepository.save(user);
+            logger.info("user saved : " + savedUser.getEmail());
 
         } else {
-
-            logger.info("Unknown Provider");
-
+            logger.info("user is already present in database : " + dbUser.getEmail());
         }
 
-        User savedUser = userRepository.save(user);
-        logger.info("user saved : "+savedUser.getEmail());
-        
-        } else {
-        logger.info("user is already present in database : "+dbUser.getEmail());
-        }
-
-        new DefaultRedirectStrategy().sendRedirect(request, response, "/user/profile");
+        new DefaultRedirectStrategy().sendRedirect(request, response, "/user/dashboard");
     }
 
 }
