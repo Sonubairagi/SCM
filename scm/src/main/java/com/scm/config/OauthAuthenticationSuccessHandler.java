@@ -53,12 +53,12 @@ public class OauthAuthenticationSuccessHandler implements AuthenticationSuccessH
          * (DefaultOAuth2User)authentication.getPrincipal();
          */
 
-        // logger.info("user name : " + authenticatedUser.getName());
-        // authenticatedUser.getAttributes().forEach((key, value) -> {
-        //     logger.info("{} => {}", key, value);
-        // });
+        logger.info("user name : " + authenticatedUser.getName());
+        authenticatedUser.getAttributes().forEach((key, value) -> {
+            logger.info("{} => {}", key, value);
+        });
 
-        // logger.info(authenticatedUser.getAuthorities().toString());
+        logger.info(authenticatedUser.getAuthorities().toString());
 
         User user = new User();
         user.setId(UUID.randomUUID().toString());
@@ -86,7 +86,7 @@ public class OauthAuthenticationSuccessHandler implements AuthenticationSuccessH
             user.setName(authenticatedUser.getAttribute("name"));
             user.setEmail(authenticatedUser.getAttribute("email") !=null ? authenticatedUser.getAttribute("email") : authenticatedUser.getAttribute("login")+"@gmail.com");
             user.setProfilePic(authenticatedUser.getAttribute("avatar_id"));
-            user.setAbout("the user logged in by google");
+            user.setAbout("the user logged in by github");
             user.setProvider(Providers.GITHUB);
             
 
