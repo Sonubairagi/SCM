@@ -39,19 +39,19 @@ public class UserServiceImpl implements UserService {
         System.out.println("inside saveUser method of UserService");
         log.info("inside saveUser of UserService");
 
-        //map from UserForm to User
+        // map from UserForm to User
         User user = userMapper.mapToUser(userForm);
 
-        //assign a unique id to user
+        // assign a unique id to user
         user.setId(UUID.randomUUID().toString());
 
-        //Encode the password before storing it into database
+        // Encode the password before storing it into database
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        //save into database
+        // save into database
         User saveUser = userRepo.save(user);
 
-        //map from User to UserForm
+        // map from User to UserForm
         UserForm mappedUserForm = userMapper.mapToUserForm(saveUser);
 
         return mappedUserForm;
@@ -59,18 +59,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserForm> getUserById(String id) {
-        
-        User user = userRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource was not found for id : "+id));
+
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Resource was not found for id : " + id));
         return Optional.ofNullable(userMapper.mapToUserForm(user));
     }
 
     @Override
     public Optional<UserDTO> updateUser(UserDTO UserDTO) {
-        User user = userRepo.findById(UserDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Resource not found for id : "+UserDTO.getId()));
-        
-        //get the value form UserDTO and store in User object and the update/save
+        User user = userRepo.findById(UserDTO.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Resource not found for id : " + UserDTO.getId()));
+
+        // get the value form UserDTO and store in User object and the update/save
         User mappedUser = userMapper.mapToUser(UserDTO);
-        
+
         User savedUser = userRepo.save(mappedUser);
 
         return Optional.ofNullable(userMapper.mapToDTO(savedUser));
@@ -78,30 +80,43 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(String id) {
-        User user = userRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource not found for id : "+id));
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Resource not found for id : " + id));
         userRepo.delete(user);
     }
 
     @Override
     public boolean isUserExist(String id) {
-       User user = userRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource not found for id : "+id));
-       return user!=null ? true : false;
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Resource not found for id : " + id));
+        return user != null ? true : false;
     }
 
     @Override
     public boolean isUserExistByEmail(String email) {
-        User user = userRepo.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Resource not found for email : "+email));
-        return user!=null ? true : false;
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Resource not found for email : " + email));
+        return user != null ? true : false;
     }
 
     @Override
     public List<UserDTO> getAllUser() {
         List<User> users = userRepo.findAll();
 
-        //map from User to UserDTO
+        // map from User to UserDTO
         List<UserDTO> userDTOs = userMapper.mapToAllUserDTO(users);
 
         return userDTOs;
+    }
+
+    @Override
+    public UserDTO getUserByEmail(String email) {
+
+        // User user = userRepo.findByEmail(email).orElseThrow(() -> new
+        // ResourceNotFoundException("user not found with username : "+email));
+        User user = userRepo.findByEmail(email).orElse(null);
+        return user != null ? userMapper.mapToDTO(user) : null;
+
     }
 
 }

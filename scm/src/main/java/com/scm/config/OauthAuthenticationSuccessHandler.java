@@ -104,7 +104,7 @@ public class OauthAuthenticationSuccessHandler implements AuthenticationSuccessH
             logger.info("user is already present in database : " + dbUser.getEmail());
         }
 
-        new DefaultRedirectStrategy().sendRedirect(request, response, "/user/dashboard");
+        new DefaultRedirectStrategy().sendRedirect(request, response, "/user/profile");
     }
 
 }

@@ -1,6 +1,12 @@
 package com.scm.controllers;
 
+import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,6 +18,8 @@ import com.scm.helper.Message;
 import com.scm.helper.MessageType;
 import com.scm.services.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
@@ -22,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class PageController {
+
+    Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private UserService userService;
@@ -51,7 +61,7 @@ public class PageController {
         System.out.println("inside services page loading...");
         return "services";
     }
-    
+
     @RequestMapping("/contact")
     public String contactPage() {
         return "contact";
@@ -61,7 +71,7 @@ public class PageController {
     public String loginPage() {
         return "login";
     }
-    
+
     @GetMapping("/signUpPage")
     public String signUpPage(Model model) {
         UserForm userForm = new UserForm();
@@ -74,26 +84,40 @@ public class PageController {
 
         System.out.println("inside signUp method");
 
-        //validation form data
-        if(bindingResult.hasErrors()) {
+        // validation form data
+        if (bindingResult.hasErrors()) {
             return "register";
         }
 
-        //call service to save data into database
+        // call service to save data into database
         UserForm saveUser = userService.saveUser(userForm);
 
-        //message = "Registration Successful!"
+        // message = "Registration Successful!"
         Message message = Message.builder().message("Registration Successful!").type(MessageType.green).build();
         session.setAttribute("message", message);
 
-        //redirect to login page
+        // redirect to login page
         return "redirect:/signUpPage";
     }
 
-
     // @GetMapping("/logout")
     // public String logout() {
-    //     return "/do-logout";
+    // return "/do-logout";
     // }
+
+    @RequestMapping("/authenticate")
+    public void authenticate(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+
+        log.info("inside authenticate method");
+
+        // request.setAttribute("authentication", authentication);
+        // try {
+        // new DefaultRedirectStrategy().sendRedirect(request, response,
+        // "/user/profile");
+        // } catch (IOException e) {
+        // // TODO Auto-generated catch block
+        // e.printStackTrace();
+        // }
+    }
 
 }

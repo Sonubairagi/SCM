@@ -9,11 +9,19 @@ import com.scm.payloads.UserDTO;
 public interface UserService {
 
     UserForm saveUser(UserForm UserForm);
+
     Optional<UserForm> getUserById(String id);
+
     Optional<UserDTO> updateUser(UserDTO userDTO);
+
     void deleteUser(String id);
+
     boolean isUserExist(String id);
+
     boolean isUserExistByEmail(String email);
+
     List<UserDTO> getAllUser();
+
+    UserDTO getUserByEmail(String email);
 
 }

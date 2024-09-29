@@ -24,7 +24,7 @@ public class SecurityConfig {
     @Autowired
     private OauthAuthenticationSuccessHandler handler;
 
-    //configuration of Security filter chain
+    // configuration of Security filter chain
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
@@ -33,36 +33,36 @@ public class SecurityConfig {
             authorize.anyRequest().permitAll();
         });
 
-        //login configuration
+        // login configuration
         httpSecurity.formLogin(login -> {
             login.loginPage("/login")
-            .loginProcessingUrl("/authenticate")
-            .successForwardUrl("/user/dashboard")
-            // .failureForwardUrl("/login?error=true")
-            .usernameParameter("email")
-            .passwordParameter("password");
+                    .loginProcessingUrl("/authenticate")
+                    .successForwardUrl("/user/loggedIn")
+                    // .failureForwardUrl("/login?error=true")
+                    .usernameParameter("email")
+                    .passwordParameter("password");
         });
 
-        //logout configurationn
+        // logout configurationn
         httpSecurity.logout(logout -> {
             logout.logoutUrl("/do-logout")
-            .logoutSuccessUrl("/login?error=true");
+                    .logoutSuccessUrl("/login?error=true");
         });
 
-        //CSRF Token Configuration
+        // CSRF Token Configuration
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
 
-        //oauth configuration
+        // oauth configuration
         // httpSecurity.oauth2Login(Customizer.withDefaults());
         httpSecurity.oauth2Login(oauth -> {
             oauth.loginPage("/login")
-            .successHandler(handler);
+                    .successHandler(handler);
         });
 
         return httpSecurity.build();
     }
 
-    //configuration of authentication provider
+    // configuration of authentication provider
     @Bean
     public AuthenticationProvider authenticationProvider() {
 
