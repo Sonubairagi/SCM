@@ -5,10 +5,10 @@
   <div
     class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
   >
-  <!-- Logo -->
+    <!-- Logo -->
     <a
       data-th-href="@{'/home'}"
-      class="flex items-center space-x-3 rtl:space-x-reverse"
+      class="items-center space-x-3 rtl:space-x-reverse"
     >
       <img
         data-th-src="@{'/images/telephone.png'}"
@@ -23,12 +23,17 @@
 
     <!-- Signin and SignUp button -->
 
-    <div class="flex gap-4 md:order-3 space-x-3 md:space-x-0 rtl:space-x-reverse">
-
+    <div
+      class="flex gap-4 md:order-3 space-x-3 md:space-x-0 rtl:space-x-reverse"
+    >
       <!-- dark and light mode change buttonn -->
-       <button id="theme_change_btn" class="bg-gray-200 px-3 py-2 rounded-md dark:bg-gray-600 dark:text-white">
-        <i class="fa-solid fa-circle-half-stroke"></i><span class="m-2">Light</span>
-       </button>
+      <button
+        id="theme_change_btn"
+        class="bg-gray-200 px-3 py-2 rounded-md dark:bg-gray-600 dark:text-white"
+      >
+        <i class="fa-solid fa-circle-half-stroke"></i
+        ><span class="m-2">Light</span>
+      </button>
 
       <a
         data-th-href="@{'/login'}"
@@ -39,11 +44,11 @@
       </a>
 
       <a
-          data-th-href="@{'/signUpPage'}"
-          type="button"
-          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        >
-          SignUp
+        data-th-href="@{'/signUpPage'}"
+        type="button"
+        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      >
+        SignUp
       </a>
 
       <!-- button for small size screen to navigate -->
