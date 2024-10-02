@@ -32,7 +32,7 @@ public class RootController {
 
     UserDTO userDto = userService.getUserByEmail(email);
 
-    model.addAttribute("user", userDto);
+    model.addAttribute("loggedInUser", userDto);
   }
 
 }

@@ -17,8 +17,14 @@
 <body class="bg-gray-100 dark:bg-gray-900 dark:text-white">
 
     <!-- Common Header -->
-    <div data-th-replace="navbar :: navbar">
+     <!-- user navbar when user logged in -->
+    <div th:if="${loggedInUser}">
+        <div data-th-replace="~{user/user_navbar :: user-navbar}"></div>
+    </div>
 
+    <!-- user navbar when user not logged in -->
+    <div th:unless="${loggedInUser}">
+        <div data-th-replace="~{navbar :: navbar}"></div>
     </div>
 
     <!-- Common Body -->
